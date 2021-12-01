@@ -1,0 +1,3267 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>SPuD - Wondrous 8005</title>
+		<script type="text/javascript" src="./lib/jquery-ui/js/jquery-1.8.0.min.js"></script>
+		<script type="text/javascript" src="./lib/jquery-ui/js/jquery-ui-1.8.23.custom.min.js"></script>
+		<script type="text/javascript" src="./lib/bootstrap/js/bootstrap.min.js"></script>
+
+		<script src="./src/spud.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="./lib/bootstrap/css/bootstrap.css">
+
+		<link type="text/css" href="./lib/jquery-ui/css/custom-theme/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="./media/fonts.css">
+		<link rel="stylesheet" type="text/css" href="./media/board.css">
+	</head>
+	<body>
+		<div style="width: 970px;">
+			<div id="spud"></div>
+		</div>
+		<center>
+			<br/>
+			When you're happy with your solution, make sure your program is in its starting state, and then click:<br/>
+			<a href="#" class="btn btn-success" id="automark-button">Check my Wondrous 8005</a>
+			<br/>
+		</center>
+
+<textarea class="hide" id="startingState">
+</textarea>
+
+<textarea class="hide" id="definition">
+name: 8005
+memoryBitSize: 8
+numMemoryAddresses: 256
+registerBitSize: 8
+registerNames: IP, IS, R0, R1, SW
+
+[descriptions]
+0: Halt
+1: Increment R0 (R0 = R0 + 1)
+2: Decrement R0 (R0 = R0 - 1)
+3: Increment R1 (R1 = R1 + 1)
+4: Decrement R1 (R1 = R1 - 1)
+5: Add (R0 = R0 + R1)	         				
+6: Subtract (R0 = R0 - R1)
+7: Print R0
+8: Jump to address <data> if R0 != 0
+9: Jump to address <data> if R0 == 0
+10: Load <data> in to R0
+11: Load <data> in to R1
+12: Store R0 into address <data>
+13: Store R1 into address <data>
+14: Swap R0 and address <data>
+15: Swap R1 and address <data>
+16: Ring the bell!
+17: Print R0 as an ASCII character
+
+[instructions]
+0, 1: halt.
+1, 1: R0++.
+2, 1: R0--.
+3, 1: R1++.
+4, 1: R1--.
+5, 1: R0 = R0 + R1.
+6, 1: R0 = R0 - R1.
+7, 1: print(R0).
+8, 2 case R0 != 0: IP = [IP-1].
+9, 2 case R0 == 0: IP = [IP-1].
+10, 2: R0 = [IP-1].
+11, 2: R1 = [IP-1].
+12, 2: [[IP-1]] = R0.
+13, 2: [[IP-1]] = R1.
+14, 2: SW = [[IP-1]]; [[IP-1]] = R0; R0 = SW.
+15, 2: SW = [[IP-1]]; [[IP-1]] = R1; R1 = SW.
+16, 1: bell.
+17, 1: printASCII(R0).
+</textarea>
+
+<textarea class="hide" id="tests">
+[
+
+
+    {
+        "name": "Half of 42",
+        "setup": [
+            {
+                "type": "clearRegisters"
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 0
+            },
+            {
+                "type": "setMemory",
+                "value": 42,
+                "key": 1
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 2
+            },
+            {
+                "type": "setMemory",
+                "value": 241,
+                "key": 3
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 4
+            },
+            {
+                "type": "setMemory",
+                "value": 49,
+                "key": 5
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 6
+            },
+            {
+                "type": "setMemory",
+                "value": 240,
+                "key": 7
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 8
+            },
+            {
+                "type": "setMemory",
+                "value": 7,
+                "key": 9
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 10
+            },
+            {
+                "type": "setMemory",
+                "value": 242,
+                "key": 11
+            },
+            {
+                "type": "setMemory",
+                "value": 11,
+                "key": 12
+            },
+            {
+                "type": "setMemory",
+                "value": 3,
+                "key": 13
+            },
+            {
+                "type": "setMemory",
+                "value": 8,
+                "key": 14
+            },
+            {
+                "type": "setMemory",
+                "value": 60,
+                "key": 15
+            },
+            {
+                "type": "setMemory",
+                "value": 9,
+                "key": 16
+            },
+            {
+                "type": "setMemory",
+                "value": 60,
+                "key": 17
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 18
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 19
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 20
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 21
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 22
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 23
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 24
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 25
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 26
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 27
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 28
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 29
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 30
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 31
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 32
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 33
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 34
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 35
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 36
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 37
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 38
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 39
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 40
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 41
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 42
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 43
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 44
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 45
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 46
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 47
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 48
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 49
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 50
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 51
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 52
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 53
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 54
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 55
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 56
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 57
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 58
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 59
+            }
+        ],
+        "test": [
+            {
+                "type": "register",
+                "parameter": "IP",
+                "match": 50,
+                "correctComment": "Passed: Function returned correctly by jumping to the return address specified in the frame (49).",
+                "incorrectComment": "Test Failed: Function did not return correctly by jumping to the return address specified in the frame (ie 49 in this test)"
+            },
+            {
+                "type": "register",
+                "parameter": "R0",
+                "match": 21,
+                "correctComment": "Passed: RO = 21. (Half of 42)",
+                "incorrectComment": "Test Failed: R0 should equal 21 (Half of 42)"
+            },
+            {
+                "type": "register",
+                "parameter": "R1",
+                "match": 3,
+                "correctComment": "Passed: R1 was preserved",
+                "incorrectComment": "Test Failed: R1 value wasn't preserved"
+            }
+        ]
+    },
+    {
+        "name": "Half of 200",
+        "setup": [
+            {
+                "type": "clearRegisters"
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 0
+            },
+            {
+                "type": "setMemory",
+                "value": 200,
+                "key": 1
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 2
+            },
+            {
+                "type": "setMemory",
+                "value": 241,
+                "key": 3
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 4
+            },
+            {
+                "type": "setMemory",
+                "value": 53,
+                "key": 5
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 6
+            },
+            {
+                "type": "setMemory",
+                "value": 240,
+                "key": 7
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 8
+            },
+            {
+                "type": "setMemory",
+                "value": 7,
+                "key": 9
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 10
+            },
+            {
+                "type": "setMemory",
+                "value": 242,
+                "key": 11
+            },
+            {
+                "type": "setMemory",
+                "value": 11,
+                "key": 12
+            },
+            {
+                "type": "setMemory",
+                "value": 30,
+                "key": 13
+            },
+            {
+                "type": "setMemory",
+                "value": 8,
+                "key": 14
+            },
+            {
+                "type": "setMemory",
+                "value": 60,
+                "key": 15
+            },
+            {
+                "type": "setMemory",
+                "value": 9,
+                "key": 16
+            },
+            {
+                "type": "setMemory",
+                "value": 60,
+                "key": 17
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 18
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 19
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 20
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 21
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 22
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 23
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 24
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 25
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 26
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 27
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 28
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 29
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 30
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 31
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 32
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 33
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 34
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 35
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 36
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 37
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 38
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 39
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 40
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 41
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 42
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 43
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 44
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 45
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 46
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 47
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 48
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 49
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 50
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 51
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 52
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 53
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 54
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 55
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 56
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 57
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 58
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 59
+            }
+        ],
+        "test": [
+            {
+                "type": "register",
+                "parameter": "IP",
+                "match": 54,
+                "correctComment": "Passed: Function returned correctly by jumping to the return address specified in the frame (53).",
+                "incorrectComment": "Test Failed: Function did not return correctly by jumping to the return address specified in the frame (ie 53 in this test)"
+            },
+            {
+                "type": "register",
+                "parameter": "R0",
+                "match": 100,
+                "correctComment": "Passed: RO = 100. (Half of 200)",
+                "incorrectComment": "Test Failed: R0 should equal 100. (Half of 200)"
+            },
+            {
+                "type": "register",
+                "parameter": "R1",
+                "match": 30,
+                "correctComment": "Passed: R1 was preserved",
+                "incorrectComment": "Test Failed: R1 value wasn't preserved"
+            }
+        ]
+    },
+    {
+        "name": "Half of 0",
+        "setup": [
+            {
+                "type": "clearRegisters"
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 0
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 1
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 2
+            },
+            {
+                "type": "setMemory",
+                "value": 241,
+                "key": 3
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 4
+            },
+            {
+                "type": "setMemory",
+                "value": 48,
+                "key": 5
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 6
+            },
+            {
+                "type": "setMemory",
+                "value": 240,
+                "key": 7
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 8
+            },
+            {
+                "type": "setMemory",
+                "value": 7,
+                "key": 9
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 10
+            },
+            {
+                "type": "setMemory",
+                "value": 242,
+                "key": 11
+            },
+            {
+                "type": "setMemory",
+                "value": 11,
+                "key": 12
+            },
+            {
+                "type": "setMemory",
+                "value": 33,
+                "key": 13
+            },
+            {
+                "type": "setMemory",
+                "value": 8,
+                "key": 14
+            },
+            {
+                "type": "setMemory",
+                "value": 60,
+                "key": 15
+            },
+            {
+                "type": "setMemory",
+                "value": 9,
+                "key": 16
+            },
+            {
+                "type": "setMemory",
+                "value": 60,
+                "key": 17
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 18
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 19
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 20
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 21
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 22
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 23
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 24
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 25
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 26
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 27
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 28
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 29
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 30
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 31
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 32
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 33
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 34
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 35
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 36
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 37
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 38
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 39
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 40
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 41
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 42
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 43
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 44
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 45
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 46
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 47
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 48
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 49
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 50
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 51
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 52
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 53
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 54
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 55
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 56
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 57
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 58
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 59
+            }
+        ],
+        "test": [
+            {
+                "type": "register",
+                "parameter": "IP",
+                "match": 49,
+                "correctComment": "Passed: Function returned correctly by jumping to the return address specified in the frame (48).",
+                "incorrectComment": "Test Failed: Function did not return correctly by jumping to the return address specified in the frame (ie 48 in this test)"
+            },
+            {
+                "type": "register",
+                "parameter": "R0",
+                "match": 0,
+                "correctComment": "Passed: RO = 0. (Half of 0)",
+                "incorrectComment": "Test Failed: R0 should equal 0. (Half of 0)"
+            },
+            {
+                "type": "register",
+                "parameter": "R1",
+                "match": 33,
+                "correctComment": "Passed: R1 was preserved",
+                "incorrectComment": "Test Failed: R1 value wasn't preserved"
+            }
+        ]
+    },
+    
+
+
+
+
+
+
+
+
+
+    {
+        "name": "testing nextTerm (30) == 15",
+        "setup": [
+            {
+                "type": "clearRegisters"
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 0
+            },
+            {
+                "info": "INPUT PRAMETER",
+                "type": "setMemory",
+                "value": 30,
+                "key": 1
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 2
+            },
+            {
+                "type": "setMemory",
+                "value": 246,
+                "key": 3
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 4
+            },
+            {   "info": "RETURN ADDRESS",
+                "type": "setMemory",
+                "value": 49,
+                "key": 5
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 6
+            },
+            {
+                "type": "setMemory",
+                "value": 245,
+                "key": 7
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 8
+            },
+            {
+                "type": "setMemory",
+                "value": 7,
+                "key": 9
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 10
+            },
+            {
+                "type": "setMemory",
+                "value": 247,
+                "key": 11
+            },
+            {
+                "type": "setMemory",
+                "value": 11,
+                "key": 12
+            },
+            {   "info": "R1 to be SAVED",
+                "type": "setMemory",
+                "value": 3,
+                "key": 13
+            },
+            {
+                "type": "setMemory",
+                "value": 8,
+                "key": 14
+            },
+            {   "info": "START ADDRESS",
+                "type": "setMemory",
+                "value": 120,
+                "key": 15
+            },
+            {
+                "type": "setMemory",
+                "value": 9,
+                "key": 16
+            },
+            {   "info": "START ADDRESS",
+                "type": "setMemory",
+                "value": 120,
+                "key": 17
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 18
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 19
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 20
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 21
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 22
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 23
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 24
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 25
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 26
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 27
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 28
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 29
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 30
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 31
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 32
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 33
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 34
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 35
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 36
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 37
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 38
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 39
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 40
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 41
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 42
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 43
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 44
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 45
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 46
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 47
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 48
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 49
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 50
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 51
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 52
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 53
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 54
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 55
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 56
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 57
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 58
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 59
+            }
+        ],
+        "test": [
+            {
+                "type": "register",
+                "parameter": "IP",
+                "match": 50,
+                "correctComment": "Passed: Function returned correctly by jumping to the return address specified in the frame (49).",
+                "incorrectComment": "Test Failed: Function did not return correctly by jumping to the return address specified in the frame (ie 49 in this test)"
+            },
+            {
+                "type": "register",
+                "parameter": "R0",
+                "match": 15,
+                "correctComment": "Passed: RO = 15. (the term after 30)",
+                "incorrectComment": "Test Failed: R0 should equal 15 (the term after 30)"
+            },
+            {
+                "type": "register",
+                "parameter": "R1",
+                "match": 3,
+                "correctComment": "Passed: R1 was preserved",
+                "incorrectComment": "Test Failed: R1 value wasn't preserved"
+            }
+        ]
+    },
+    {
+        "name": "testing nextTerm (9) == 28",
+        "setup": [
+            {
+                "type": "clearRegisters"
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 0
+            },
+            {
+                "info": "INPUT PRAMETER",
+                "type": "setMemory",
+                "value": 9,
+                "key": 1
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 2
+            },
+            {
+                "type": "setMemory",
+                "value": 246,
+                "key": 3
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 4
+            },
+            {   "info": "RETURN ADDRESS",
+                "type": "setMemory",
+                "value": 51,
+                "key": 5
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 6
+            },
+            {
+                "type": "setMemory",
+                "value": 245,
+                "key": 7
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 8
+            },
+            {
+                "type": "setMemory",
+                "value": 7,
+                "key": 9
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 10
+            },
+            {
+                "type": "setMemory",
+                "value": 247,
+                "key": 11
+            },
+            {
+                "type": "setMemory",
+                "value": 11,
+                "key": 12
+            },
+            {   "info": "R1 to be SAVED",
+                "type": "setMemory",
+                "value": 33,
+                "key": 13
+            },
+            {
+                "type": "setMemory",
+                "value": 8,
+                "key": 14
+            },
+            {   "info": "START ADDRESS",
+                "type": "setMemory",
+                "value": 120,
+                "key": 15
+            },
+            {
+                "type": "setMemory",
+                "value": 9,
+                "key": 16
+            },
+            {   "info": "START ADDRESS",
+                "type": "setMemory",
+                "value": 120,
+                "key": 17
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 18
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 19
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 20
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 21
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 22
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 23
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 24
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 25
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 26
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 27
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 28
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 29
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 30
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 31
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 32
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 33
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 34
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 35
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 36
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 37
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 38
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 39
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 40
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 41
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 42
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 43
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 44
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 45
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 46
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 47
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 48
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 49
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 50
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 51
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 52
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 53
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 54
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 55
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 56
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 57
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 58
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 59
+            }
+        ],
+        "test": [
+            {
+                "type": "register",
+                "parameter": "IP",
+                "match": 52,
+                "correctComment": "Passed: Function returned correctly by jumping to the return address specified in the frame (51).",
+                "incorrectComment": "Test Failed: Function did not return correctly by jumping to the return address specified in the frame (ie 53 in this test)"
+            },
+            {
+                "type": "register",
+                "parameter": "R0",
+                "match": 28,
+                "correctComment": "Passed: RO = 28. next term after 9",
+                "incorrectComment": "Test Failed: R0 should equal 28. (next term after 9)"
+            },
+            {
+                "type": "register",
+                "parameter": "R1",
+                "match": 33,
+                "correctComment": "Passed: R1 was preserved",
+                "incorrectComment": "Test Failed: R1 value wasn't preserved"
+            }
+        ]
+    },
+    {
+        "name": "testing nextTerm (0) == 0",
+        "setup": [
+            {
+                "type": "clearRegisters"
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 0
+            },
+            {
+                "info": "INPUT PRAMETER",
+                "type": "setMemory",
+                "value": 0,
+                "key": 1
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 2
+            },
+            {
+                "type": "setMemory",
+                "value": 246,
+                "key": 3
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 4
+            },
+            {   "info": "RETURN ADDRESS",
+                "type": "setMemory",
+                "value": 48,
+                "key": 5
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 6
+            },
+            {
+                "type": "setMemory",
+                "value": 245,
+                "key": 7
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 8
+            },
+            {
+                "type": "setMemory",
+                "value": 7,
+                "key": 9
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 10
+            },
+            {
+                "type": "setMemory",
+                "value": 247,
+                "key": 11
+            },
+            {
+                "type": "setMemory",
+                "value": 11,
+                "key": 12
+            },
+            {   "info": "R1 to be SAVED",
+                "type": "setMemory",
+                "value": 100,
+                "key": 13
+            },
+            {
+                "type": "setMemory",
+                "value": 8,
+                "key": 14
+            },
+            {   "info": "START ADDRESS",
+                "type": "setMemory",
+                "value": 120,
+                "key": 15
+            },
+            {
+                "type": "setMemory",
+                "value": 9,
+                "key": 16
+            },
+            {   "info": "START ADDRESS",
+                "type": "setMemory",
+                "value": 120,
+                "key": 17
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 18
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 19
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 20
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 21
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 22
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 23
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 24
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 25
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 26
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 27
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 28
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 29
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 30
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 31
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 32
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 33
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 34
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 35
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 36
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 37
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 38
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 39
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 40
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 41
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 42
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 43
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 44
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 45
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 46
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 47
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 48
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 49
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 50
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 51
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 52
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 53
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 54
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 55
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 56
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 57
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 58
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 59
+            }
+        ],
+        "test": [
+            {
+                "type": "register",
+                "parameter": "IP",
+                "match": 49,
+                "correctComment": "Passed: Function returned correctly by jumping to the return address specified in the frame (48).",
+                "incorrectComment": "Test Failed: Function did not return correctly by jumping to the return address specified in the frame (ie 48 in this test)"
+            },
+            {
+                "type": "register",
+                "parameter": "R0",
+                "match": 0,
+                "correctComment": "Passed: RO = 0. (next term after 0)",
+                "incorrectComment": "Test Failed: R0 should equal 0. (next term after 0)"
+            },
+            {
+                "type": "register",
+                "parameter": "R1",
+                "match": 100,
+                "correctComment": "Passed: R1 was preserved",
+                "incorrectComment": "Test Failed: R1 value wasn't preserved"
+            }
+        ]
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+        {
+        "name": "testing isEven (9) == 0",
+        "setup": [
+            {
+                "type": "clearRegisters"
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 0
+            },
+            {
+                "info": "INPUT PRAMETER",
+                "type": "setMemory",
+                "value": 9,
+                "key": 1
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 2
+            },
+            {
+                "type": "setMemory",
+                "value": 251,
+                "key": 3
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 4
+            },
+            {   "info": "RETURN ADDRESS",
+                "type": "setMemory",
+                "value": 49,
+                "key": 5
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 6
+            },
+            {
+                "type": "setMemory",
+                "value": 250,
+                "key": 7
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 8
+            },
+            {
+                "type": "setMemory",
+                "value": 7,
+                "key": 9
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 10
+            },
+            {
+                "type": "setMemory",
+                "value": 252,
+                "key": 11
+            },
+            {
+                "type": "setMemory",
+                "value": 11,
+                "key": 12
+            },
+            {   "info": "R1 to be SAVED",
+                "type": "setMemory",
+                "value": 23,
+                "key": 13
+            },
+            {
+                "type": "setMemory",
+                "value": 8,
+                "key": 14
+            },
+            {   "info": "START ADDRESS",
+                "type": "setMemory",
+                "value": 180,
+                "key": 15
+            },
+            {
+                "type": "setMemory",
+                "value": 9,
+                "key": 16
+            },
+            {   "info": "START ADDRESS",
+                "type": "setMemory",
+                "value": 180,
+                "key": 17
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 18
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 19
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 20
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 21
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 22
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 23
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 24
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 25
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 26
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 27
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 28
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 29
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 30
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 31
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 32
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 33
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 34
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 35
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 36
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 37
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 38
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 39
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 40
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 41
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 42
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 43
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 44
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 45
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 46
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 47
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 48
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 49
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 50
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 51
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 52
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 53
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 54
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 55
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 56
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 57
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 58
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 59
+            }
+        ],
+        "test": [
+            {
+                "type": "register",
+                "parameter": "IP",
+                "match": 50,
+                "correctComment": "Passed: Function returned correctly by jumping to the return address specified in the frame (49).",
+                "incorrectComment": "Test Failed: Function did not return correctly by jumping to the return address specified in the frame (ie 49 in this test)"
+            },
+            {
+                "type": "register",
+                "parameter": "R0",
+                "match": 0,
+                "correctComment": "Passed: RO = 0. (isEven (9) == 0)",
+                "incorrectComment": "Test Failed: R0 should equal 0 (isEven (9) == 0)"
+            },
+            {
+                "type": "register",
+                "parameter": "R1",
+                "match": 23,
+                "correctComment": "Passed: R1 was preserved",
+                "incorrectComment": "Test Failed: R1 value wasn't preserved"
+            }
+        ]
+    },
+    {
+        "name": "testing isEven (123) == 0",
+        "setup": [
+            {
+                "type": "clearRegisters"
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 0
+            },
+            {
+                "info": "INPUT PRAMETER",
+                "type": "setMemory",
+                "value": 123,
+                "key": 1
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 2
+            },
+            {
+                "type": "setMemory",
+                "value": 251,
+                "key": 3
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 4
+            },
+            {   "info": "RETURN ADDRESS",
+                "type": "setMemory",
+                "value": 55,
+                "key": 5
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 6
+            },
+            {
+                "type": "setMemory",
+                "value": 250,
+                "key": 7
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 8
+            },
+            {
+                "type": "setMemory",
+                "value": 7,
+                "key": 9
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 10
+            },
+            {
+                "type": "setMemory",
+                "value": 252,
+                "key": 11
+            },
+            {
+                "type": "setMemory",
+                "value": 11,
+                "key": 12
+            },
+            {   "info": "R1 to be SAVED",
+                "type": "setMemory",
+                "value": 42,
+                "key": 13
+            },
+            {
+                "type": "setMemory",
+                "value": 8,
+                "key": 14
+            },
+            {   "info": "START ADDRESS",
+                "type": "setMemory",
+                "value": 180,
+                "key": 15
+            },
+            {
+                "type": "setMemory",
+                "value": 9,
+                "key": 16
+            },
+            {   "info": "START ADDRESS",
+                "type": "setMemory",
+                "value": 180,
+                "key": 17
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 18
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 19
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 20
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 21
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 22
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 23
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 24
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 25
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 26
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 27
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 28
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 29
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 30
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 31
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 32
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 33
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 34
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 35
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 36
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 37
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 38
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 39
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 40
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 41
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 42
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 43
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 44
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 45
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 46
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 47
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 48
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 49
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 50
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 51
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 52
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 53
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 54
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 55
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 56
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 57
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 58
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 59
+            }
+        ],
+        "test": [
+            {
+                "type": "register",
+                "parameter": "IP",
+                "match": 56,
+                "correctComment": "Passed: Function returned correctly by jumping to the return address specified in the frame (55).",
+                "incorrectComment": "Test Failed: Function did not return correctly by jumping to the return address specified in the frame (ie 55 in this test)"
+            },
+            {
+                "type": "register",
+                "parameter": "R0",
+                "match": 0,
+                "correctComment": "Passed: RO = 0. (isEven (123) == 0)",
+                "incorrectComment": "Test Failed: R0 should equal 0 (isEven (123) == 0)"
+            },
+            {
+                "type": "register",
+                "parameter": "R1",
+                "match": 42,
+                "correctComment": "Passed: R1 was preserved",
+                "incorrectComment": "Test Failed: R1 value wasn't preserved"
+            }
+        ]
+    },
+    {
+        "name": "testing nextTerm (69) == 1",
+        "setup": [
+            {
+                "type": "clearRegisters"
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 0
+            },
+            {
+                "info": "INPUT PRAMETER",
+                "type": "setMemory",
+                "value": 69,
+                "key": 1
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 2
+            },
+            {
+                "type": "setMemory",
+                "value": 246,
+                "key": 3
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 4
+            },
+            {   "info": "RETURN ADDRESS",
+                "type": "setMemory",
+                "value": 20,
+                "key": 5
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 6
+            },
+            {
+                "type": "setMemory",
+                "value": 245,
+                "key": 7
+            },
+            {
+                "type": "setMemory",
+                "value": 10,
+                "key": 8
+            },
+            {
+                "type": "setMemory",
+                "value": 7,
+                "key": 9
+            },
+            {
+                "type": "setMemory",
+                "value": 12,
+                "key": 10
+            },
+            {
+                "type": "setMemory",
+                "value": 247,
+                "key": 11
+            },
+            {
+                "type": "setMemory",
+                "value": 11,
+                "key": 12
+            },
+            {   "info": "R1 to be SAVED",
+                "type": "setMemory",
+                "value": 100,
+                "key": 13
+            },
+            {
+                "type": "setMemory",
+                "value": 8,
+                "key": 14
+            },
+            {   "info": "START ADDRESS",
+                "type": "setMemory",
+                "value": 120,
+                "key": 15
+            },
+            {
+                "type": "setMemory",
+                "value": 9,
+                "key": 16
+            },
+            {   "info": "START ADDRESS",
+                "type": "setMemory",
+                "value": 120,
+                "key": 17
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 18
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 19
+            },
+            {
+                "type": "setMemory",
+                "value": 8,
+                "key": 20
+            },
+            {
+                "type": "setMemory",
+                "value": 33,
+                "key": 21
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 22
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 23
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 24
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 25
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 26
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 27
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 28
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 29
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 30
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 31
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 32
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 33
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 34
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 35
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 36
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 37
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 38
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 39
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 40
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 41
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 42
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 43
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 44
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 45
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 46
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 47
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 48
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 49
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 50
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 51
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 52
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 53
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 54
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 55
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 56
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 57
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 58
+            },
+            {
+                "type": "setMemory",
+                "value": 0,
+                "key": 59
+            }
+        ],
+        "test": [
+            {
+                "type": "register",
+                "parameter": "IP",
+                "match": 34,
+                "correctComment": "Passed: RO is not 0. (isEven (69) != 0)",
+                "incorrectComment": "Test Failed: R0 should not be equal to 0. (isEven (69) != 0)"
+            },
+            {
+                "type": "register",
+                "parameter": "R1",
+                "match": 100,
+                "correctComment": "Passed: R1 was preserved.   \n\nAll tests passed!  \nYOU ARE AWESOME!",
+                "incorrectComment": "Test Failed: R1 value wasn't preserved"
+            }
+        ]
+    },
+
+       {
+      "name":"Testing Wondrous main program when cell 255 contains 1",
+      "setup":[
+         {
+            "type":"clearRegisters"
+         },
+         {
+            "type":"setMemory",
+            "key":255,
+            "value":1
+         }
+      ],
+      "test":[
+         {
+            "type":"output",
+            "match":"1",
+            "correctComment":"Test passed.",
+            "incorrectComment":"Output Doesn't Match (expecting 1)"
+         }
+      ]
+   },
+ {
+      "name":"Testing when cell 255 contains 2",
+      "setup":[
+         {
+            "type":"clearRegisters"
+         },
+         {
+            "type":"setMemory",
+            "key":255,
+            "value":2
+         }
+      ],
+      "test":[
+         {
+            "type":"output",
+            "match":"2 1",
+            "correctComment":"Test passed!",
+            "incorrectComment":"Output Doesn't Match (expecting 2 1)"
+         }
+      ]
+   },
+   {
+      "name":"Testing when cell 255 contains 23",
+      "setup":[
+         {
+            "type":"clearRegisters"
+         },
+         {
+            "type":"setMemory",
+            "key":255,
+            "value":23
+         }
+      ],
+      "test":[
+         {
+            "type":"output",
+            "match":"23 70 35 106 53 160 80 40 20 10 5 16 8 4 2 1",
+            "correctComment":"Test passed!",
+            "incorrectComment":"Output Doesn't Match (expecting 23 70 35 106 53 160 80 40 20 10 5 16 8 4 2 1)"
+         }
+      ]
+   },
+ {
+      "name":"Testing when cell 255 contains 213",
+      "setup":[
+         {
+            "type":"clearRegisters"
+         },
+         {
+            "type":"setMemory",
+            "key":255,
+            "value":213
+         }
+      ],
+      "test":[
+         {
+            "type":"output",
+            "match":"213 128 64 32 16 8 4 2 1",
+            "correctComment":"Test passed!",
+            "incorrectComment":"Output Doesn't Match (expecting 213 128 64 32 16 8 4 2 1)"
+         }
+      ]
+   },
+ {
+      "name":"Testing when cell 255 contains 8",
+      "setup":[
+         {
+            "type":"clearRegisters"
+         },
+         {
+            "type":"setMemory",
+            "key":255,
+            "value":8
+         }
+      ],
+      "test":[
+         {
+            "type":"output",
+            "match":"8 4 2 1",
+            "correctComment":"Test passed!",
+            "incorrectComment":"Output Doesn't Match (expecting 1)"
+         }
+      ]
+   }
+
+]
+</textarea>
+
+		<script>
+			var tests;
+			
+			try {
+				tests = JSON.parse( $('#tests').text() );
+			} catch (err) {
+				console.log( $('#tests').text() );
+				alert( err );
+			}
+
+			var state = "null";
+			var saveFunc = function(saveObject) {
+				alert( 'Save: ' + JSON.stringify(saveObject) );
+				state = JSON.stringify(saveObject);
+			};
+
+			var loadFunc = function(callback) {
+			//	alert( 'Load' );
+				
+				callback(JSON.parse(state));
+			};
+
+			var loadApp = function(audio, onSave, onLoad) {
+				$('#spud').spud( {
+					definition: $('#definition').text(),
+					startingState: $('#startingState').text(),
+					workerScript: './src/spudEmu.js',
+					audio: audio,
+					onSave: onSave,
+					onLoad: onLoad
+				} );
+			};
+
+			loadApp(undefined, saveFunc, loadFunc);
+
+			var saveMarks = function( marks ) {
+				console.log( 'MARKS:' );
+				console.log( marks );
+                                for(var e="",n=marks.length,s=0;n>s;s++)e=e.concat(marks[s].comment);
+                                alert(e);
+			};
+
+			var runTest = function(tests, i, callback) {
+				$('#spud').spud('automark', tests[i].setup, tests[i].test, callback);
+			};
+
+			var runTests = function(tests, callback) {
+				var test;
+				var i = 0;
+				var results = [];
+
+				var nextTest = function(result) {
+					results.push(result);
+
+					console.log(tests[i], result);
+
+					i += 1;
+					if (result.completed && i < tests.length) {
+						runTest( tests, i, nextTest );
+					} else {
+						callback(results);
+					}
+				};
+
+				runTest( tests, i, nextTest );
+			};
+
+			$('#automark-button').click( function( ) {
+				runTests( tests, saveMarks );
+				return false;
+			} );
+
+		</script>
+	</body>
+</html>

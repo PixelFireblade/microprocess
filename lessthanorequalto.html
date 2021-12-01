@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>SPuD - Less than or equal to</title>
+		<script type="text/javascript" src="./lib/jquery-ui/js/jquery-1.8.0.min.js"></script>
+		<script type="text/javascript" src="./lib/jquery-ui/js/jquery-ui-1.8.23.custom.min.js"></script>
+		<script type="text/javascript" src="./lib/bootstrap/js/bootstrap.min.js"></script>
+
+		<script src="./src/spud.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="./lib/bootstrap/css/bootstrap.css">
+
+		<link type="text/css" href="./lib/jquery-ui/css/custom-theme/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="./media/fonts.css">
+		<link rel="stylesheet" type="text/css" href="./media/board.css">
+	</head>
+	<body>
+			<div style="width: 970px;">
+				<div id="spud"></div>
+			</div><br />
+Make sure your program is in its starting state, then click the button to run some tests:<br />
+<a href="#" class="btn btn-success" id="automark-button">Check my Less Than or Equal To</a>
+
+<textarea class="hide" id="startingState">
+</textarea>
+
+<textarea class="hide" id="definition">
+name: 8005
+memoryBitSize: 8
+numMemoryAddresses: 256
+registerBitSize: 8
+registerNames: IP, IS, R0, R1, SW
+
+[descriptions]
+0: Halt
+1: Increment R0 (R0 = R0 + 1)
+2: Decrement R0 (R0 = R0 - 1)
+3: Increment R1 (R1 = R1 + 1)
+4: Decrement R1 (R1 = R1 - 1)
+5: Add (R0 = R0 + R1)	         				
+6: Subtract (R0 = R0 - R1)
+7: Print R0
+8: Jump to address <data> if R0 != 0
+9: Jump to address <data> if R0 == 0
+10: Load <data> in to R0
+11: Load <data> in to R1
+12: Store R0 into address <data>
+13: Store R1 into address <data>
+14: Swap R0 and address <data>
+15: Swap R1 and address <data>
+16: Ring the bell!
+17: Print R0 as an ASCII character
+
+[instructions]
+0, 1: halt.
+1, 1: R0++.
+2, 1: R0--.
+3, 1: R1++.
+4, 1: R1--.
+5, 1: R0 = R0 + R1.
+6, 1: R0 = R0 - R1.
+7, 1: print(R0).
+8, 2 case R0 != 0: IP = [IP-1].
+9, 2 case R0 == 0: IP = [IP-1].
+10, 2: R0 = [IP-1].
+11, 2: R1 = [IP-1].
+12, 2: [[IP-1]] = R0.
+13, 2: [[IP-1]] = R1.
+14, 2: SW = [[IP-1]]; [[IP-1]] = R0; R0 = SW.
+15, 2: SW = [[IP-1]]; [[IP-1]] = R1; R1 = SW.
+16, 1: bell.
+17, 1: printASCII(R0).
+</textarea>
+
+<textarea class="hide" id="tests">
+[
+	{
+		"name": "Checking if 42 <= 69",
+		"setup": [ 
+			{ "type": "clearRegisters" }, 
+			{ "type": "setMemory", "key": 14, "value": 42 },
+			{ "type": "setMemory", "key": 15, "value": 69 }
+ 		],
+		"test": [
+			{
+				"type": "output",
+				"parameter": "not",
+				"match": "0",
+				"correctComment": "Correct",
+				"incorrectComment": "Found 0 (expecting non-zero)"
+			}
+		]
+	},
+	{
+		"name": "Checking if 20 <= 20",
+		"setup": [ 
+			{ "type": "clearRegisters" }, 
+			{ "type": "setMemory", "key": 14, "value": 20 },
+			{ "type": "setMemory", "key": 15, "value": 20 }
+ 		],
+		"test": [
+			{
+				"type": "output",
+				"parameter": "not",
+				"match": "0",
+				"correctComment": "Correct",
+				"incorrectComment": "Found 0 (expecting non-zero)"
+			}
+		]
+	},
+	{
+		"name": "Checking if 100 <= 20",
+		"setup": [ 
+			{ "type": "clearRegisters" }, 
+			{ "type": "setMemory", "key": 14, "value": 100 },
+			{ "type": "setMemory", "key": 15, "value": 20 }
+ 		],
+		"test": [
+			{
+				"type": "output",
+				"match": "0",
+				"correctComment": "Correct",
+				"incorrectComment": "Found non-zero (expecting 0)"
+			}
+		]
+	},
+	{
+		"name": "Checking if 0 <= 255",
+		"setup": [ 
+			{ "type": "clearRegisters" }, 
+			{ "type": "setMemory", "key": 14, "value": 0 },
+			{ "type": "setMemory", "key": 15, "value": 255 }
+ 		],
+		"test": [
+			{
+				"type": "output",
+				"parameter": "not",
+				"match": "0",
+				"correctComment": "Correct",
+				"incorrectComment": "Found 0 (expecting non-zero)"
+			}
+		]
+	},
+	{
+		"name": "Checking if 255 <= 0",
+		"setup": [ 
+			{ "type": "clearRegisters" }, 
+			{ "type": "setMemory", "key": 14, "value": 255 },
+			{ "type": "setMemory", "key": 15, "value": 0 }
+ 		],
+		"test": [
+			{
+				"type": "output",
+				"match": "0",
+				"correctComment": "Correct",
+				"incorrectComment": "Found non-zero (expecting 0)"
+			}
+		]
+	},
+	{
+		"name": "Checking if 0 <= 0",
+		"setup": [ 
+			{ "type": "clearRegisters" }, 
+			{ "type": "setMemory", "key": 14, "value": 0 },
+			{ "type": "setMemory", "key": 15, "value": 0 }
+ 		],
+		"test": [
+			{
+				"type": "output",
+				"parameter": "not",
+				"match": "0",
+				"correctComment": "Correct",
+				"incorrectComment": "Found 0 (expecting non-zero)"
+			}
+		]
+	},
+	{
+		"name": "Checking if 255 <= 255",
+		"setup": [ 
+			{ "type": "clearRegisters" }, 
+			{ "type": "setMemory", "key": 14, "value": 255 },
+			{ "type": "setMemory", "key": 15, "value": 255 }
+ 		],
+		"test": [
+			{
+				"type": "output",
+				"parameter": "not",
+				"match": "0",
+				"correctComment": "Correct",
+				"incorrectComment": "Found 0 (expecting non-zero)"
+			}
+		]
+	}
+]
+</textarea>
+
+		<script>
+			var tests;
+			
+			try {
+				tests = JSON.parse( $('#tests').text() );
+			} catch (err) {
+				console.log( $('#tests').text() );
+				alert( err );
+			}
+
+			var state = "null";
+			var saveFunc = function(saveObject) {
+				alert( 'Save: ' + JSON.stringify(saveObject) );
+				state = JSON.stringify(saveObject);
+			};
+
+			var loadFunc = function(callback) {
+				//alert( 'Load' );
+				
+				callback(JSON.parse(state));
+			};
+
+			var loadApp = function(audio, onSave, onLoad) {
+				$('#spud').spud( {
+					definition: $('#definition').text(),
+					startingState: $('#startingState').text(),
+					workerScript: './src/spudEmu.js',
+					audio: audio,
+					onSave: onSave,
+					onLoad: onLoad
+				} );
+			};
+
+			loadApp(undefined, saveFunc, loadFunc);
+
+			var saveMarks = function( marks ) {
+				console.log( 'MARKS:' );
+				console.log( marks );
+                                alert(marks[0].comment);
+			};
+
+			var runTest = function(tests, i, callback) {
+				$('#spud').spud('automark', tests[i].setup, tests[i].test, callback);
+			};
+
+			var runTests = function(tests, callback) {
+				var test;
+				var i = 0;
+				var results = [];
+
+				var nextTest = function(result) {
+					results.push(result);
+
+					console.log(tests[i], result);
+
+					i += 1;
+					if (result.completed && i < tests.length) {
+						runTest( tests, i, nextTest );
+					} else {
+						callback(results);
+					}
+				};
+
+				runTest( tests, i, nextTest );
+			};
+
+			$('#automark-button').click( function( ) {
+				runTests( tests, saveMarks );
+				return false;
+			} );
+
+		</script>
+	</body>
+</html>

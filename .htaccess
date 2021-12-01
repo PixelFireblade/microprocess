@@ -1,0 +1,25 @@
+<Files wondrous8005.cgi>
+	<IfModule mod_ssl.c>
+		AuthName "Restricted to COMP1917"
+		AuthType Basic
+		AuthYP On
+		require group @COMP1917
+                require user jcw, angf
+	</IfModule>
+	<IfModule !mod_ssl.c>
+		Redirect "/~cs1917ass/emulator/OLApps_SPuD/standalone/ui/wondrous8005.cgi" "https://cgi.cse.unsw.edu.au/~cs1917ass/emulator/OLApps_SPuD/standalone/ui/wondrous8005.cgi"		
+	</IfModule>
+</Files>
+
+<Files half8005.cgi>
+	<IfModule mod_ssl.c>
+		AuthName "Restricted to COMP1917"
+		AuthType Basic
+		AuthYP On
+		require group @COMP1917
+                require user jcw, angf
+	</IfModule>
+	<IfModule !mod_ssl.c>
+		Redirect "/~cs1917ass/emulator/OLApps_SPuD/standalone/ui/half8005.cgi" "https://cgi.cse.unsw.edu.au/~cs1917ass/emulator/OLApps_SPuD/standalone/ui/half8005.cgi"		
+	</IfModule>
+</Files>

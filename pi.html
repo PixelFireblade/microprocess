@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>4001 Pi Emulator</title>
+		<script type="text/javascript" src="./lib/jquery-ui/js/jquery-1.8.0.min.js"></script>
+		<script type="text/javascript" src="./lib/jquery-ui/js/jquery-ui-1.8.23.custom.min.js"></script>
+		<script type="text/javascript" src="./lib/bootstrap/js/bootstrap.min.js"></script>
+
+		<script src="./src/spud.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="./lib/bootstrap/css/bootstrap.css">
+
+		<link type="text/css" href="./lib/jquery-ui/css/custom-theme/jquery-ui-1.8.23.custom.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="./media/fonts.css">
+		<link rel="stylesheet" type="text/css" href="./media/board.css">
+	</head>
+	<body>
+			<div style="width: 970px;">
+				<div id="spud"></div>
+			</div>
+			<br/><br />
+<b>Your task:</b><br />
+The number Pi starts like:<br />
+3.1415926535897932384626433832795028841971693993751058209...<br />
+Write a 4001 program to print out as much of this number as you can (ignoring the decimal point).<br />
+If you can print "3141" - that's ok<br />
+BUT if you can print "31415" that's better.<br />
+How many digits of pi can you print out? <br />
+Your program must halt after printing the digits, it should not get into an infinite loop (ie it eventually needs to execute the halt instruction).<br />
+<br />
+
+
+
+Press Edit Program Code button to make your big piece of pi. When you are happy with your pi, press the Upload button. 
+<br/>
+Run it by clicking Reset (this resets the register to 0) and then click Run.
+<br/>
+Submit your answer to the marking elves by pressing this green button
+			<a href="#" class="btn btn-success" id="automark-button">Test My Pi!</a>
+			<br/>
+<textarea class="hide" id="startingState">
+</textarea>
+
+<textarea class="hide" id="definition">
+name: 4001
+memoryBitSize: 4
+numMemoryAddresses: 16
+registerBitSize: 4
+registerNames: IP, IS, R
+
+[descriptions]
+0: "Halt"
+1: "Increase by 1"    (R = R + 1)
+2: "Increase by 2"    (R = R + 2)
+3: "Increase by 4"    (R = R + 4)
+4: "Increase by 8"    (R = R + 8)
+5: N/A         
+6: N/A 
+7: "Print"   Print the contents of R
+
+[instructions]
+0, 1: halt.
+1, 1: R = R + 1.
+2, 1: R = R + 2.
+3, 1: R = R + 4.
+4, 1: R = R + 8.
+5, 1: nop.
+6, 1: nop.
+7, 1: print(R).
+</textarea>
+
+<textarea class="hide" id="tests">
+[
+{
+"name": "Checking digits produced match PI...",
+"setup": [ { "type": "clearRegisters" } ],
+"test": [
+{
+"type": "output",
+"parameter": "startswith",
+"match": "3141",
+"correctComment": "At least 4 Digits match!",
+"incorrectComment": "Try to match at least 4 digits."
+},
+{
+"type": "output",
+"parameter": "rstartswith",
+"match": "31415926535897932384626433832795028841971693993751058209",
+"correctComment": "This indeed looks like PI",
+"incorrectComment": "The rest doesn't look like PI"
+},
+{
+"type": "output",
+"parameter": "startswith",
+"match": "31415",
+"optional": true,
+"correctComment": "At least 5 Digits!",
+"incorrectComment": ""
+},
+{
+"type": "output",
+"parameter": "startswith",
+"match": "314159",
+"optional": true,
+"correctComment": "At least 6 Digits!!",
+"incorrectComment": ""
+},
+{
+"type": "output",
+"parameter": "startswith",
+"match": "3141592",
+"optional": true,
+"correctComment": "At least 7 Digits - Well done!",
+"incorrectComment": ""
+},
+{
+"type": "output",
+"parameter": "startswith",
+"match": "31415926",
+"optional": true,
+"correctComment": "At least 8 Digits - Amazing!!",
+"incorrectComment": ""
+},
+{
+"type": "output",
+"parameter": "startswith",
+"match": "314159265",
+"optional": true,
+"correctComment": "At least 9 Digits!!!! Wow!",
+"incorrectComment": ""
+},
+{
+"type": "output",
+"parameter": "startswith",
+"match": "3141592653",
+"optional": true,
+"correctComment": "Over 9 digits? I don't believe it.",
+"incorrectComment": ""
+}
+]
+}
+]
+</textarea>
+
+		<script>
+			var tests;
+			
+			try {
+				tests = JSON.parse( $('#tests').text() );
+			} catch (err) {
+				console.log( $('#tests').text() );
+				alert( err );
+			}
+
+			var state = "null";
+			var saveFunc = function(saveObject) {
+				alert( 'Save: ' + JSON.stringify(saveObject) );
+				state = JSON.stringify(saveObject);
+			};
+
+			var loadFunc = function(callback) {
+				//alert( 'Load' );
+				
+				callback(JSON.parse(state));
+			};
+
+			var loadApp = function(audio, onSave, onLoad) {
+				$('#spud').spud( {
+					definition: $('#definition').text(),
+					startingState: $('#startingState').text(),
+					workerScript: './src/spudEmu.js',
+					audio: audio,
+					onSave: onSave,
+					onLoad: onLoad
+				} );
+			};
+
+			loadApp(undefined, saveFunc, loadFunc);
+
+			var saveMarks = function( marks ) {
+				console.log( 'MARKS:' );
+				console.log( marks );
+                                alert(marks[0].comment);
+			};
+
+			var runTest = function(tests, i, callback) {
+				$('#spud').spud('automark', tests[i].setup, tests[i].test, callback);
+			};
+
+			var runTests = function(tests, callback) {
+				var test;
+				var i = 0;
+				var results = [];
+
+				var nextTest = function(result) {
+					results.push(result);
+
+					console.log(tests[i], result);
+
+					i += 1;
+					if (result.completed && i < tests.length) {
+						runTest( tests, i, nextTest );
+					} else {
+						callback(results);
+					}
+				};
+
+				runTest( tests, i, nextTest );
+			};
+
+			$('#automark-button').click( function( ) {
+				runTests( tests, saveMarks );
+				return false;
+			} );
+
+		</script>
+	</body>
+</html>
